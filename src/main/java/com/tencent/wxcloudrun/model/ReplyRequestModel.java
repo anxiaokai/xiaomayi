@@ -1,11 +1,19 @@
 package com.tencent.wxcloudrun.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ReplyRequestModel {
+    @JsonProperty("ToUserName")
     private String toUserName;
+    @JsonProperty("FromUserName")
     private String fromUserName;
+    @JsonProperty("CreateTime")
     private String createTime;
+    @JsonProperty("MsgType")
     private String msgType;
+    @JsonProperty("Content")
     private String content;
+    @JsonProperty("MsgId")
     private String msgId;
 
     public String getToUserName() {

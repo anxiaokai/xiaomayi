@@ -15,6 +15,9 @@ spring:
 
 openai:
   token: ${OPENAI_TOKEN}
+  model: ${OPENAI_MODEL}
+  host: ${OPENAI_HOST}
+  port: ${OPENAI_PORT}
 
 mybatis:
   mapper-locations: classpath*:mapper/*Mapper.xml
