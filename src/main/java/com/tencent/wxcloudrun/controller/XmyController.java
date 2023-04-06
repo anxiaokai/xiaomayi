@@ -16,7 +16,7 @@ public class XmyController {
    * 验证接口
    * @return
    */
-  @GetMapping
+  @GetMapping(value = "/reply")
   public String signature(String signature,String timestamp,String nonce,String echostr) {
     logger.info("参数 = signature:{},timestamp:{},nonce:{},echostr:{}",signature,timestamp,nonce,echostr);
     return "echostr";
