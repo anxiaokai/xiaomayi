@@ -13,5 +13,8 @@ spring:
       suffix: .html
       prefix: /
 
+openai:
+  token: ${OPENAI_TOKEN}
+
 mybatis:
   mapper-locations: classpath*:mapper/*Mapper.xml
