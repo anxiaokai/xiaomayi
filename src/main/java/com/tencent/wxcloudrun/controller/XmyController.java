@@ -52,7 +52,7 @@ public class XmyController {
     replyResponseTextModel.setToUserName(replyRequestModel.getFromUserName());
     replyResponseTextModel.setFromUserName(replyRequestModel.getToUserName());
     replyResponseTextModel.setCreateTime(String.valueOf(System.currentTimeMillis()/1000));
-    replyResponseTextModel.setMsgType(replyRequestModel.getMsgType());
+    replyResponseTextModel.setMsgType("text");
 
     String content = replyRequestModel.getContent();
     if("IO模型思考题".equals(content)){
