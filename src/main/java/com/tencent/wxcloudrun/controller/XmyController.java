@@ -2,6 +2,7 @@ package com.tencent.wxcloudrun.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tencent.wxcloudrun.model.ReplyRequestModel;
+import com.tencent.wxcloudrun.model.ReplyResponseTextModel;
 import com.theokanning.openai.OpenAiApi;
 import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
@@ -20,6 +21,7 @@ import retrofit2.Retrofit;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.time.Duration;
+import java.util.Objects;
 
 import static com.theokanning.openai.service.OpenAiService.*;
 
@@ -44,27 +46,21 @@ public class XmyController {
    * @return
    */
   @PostMapping(value = "/reply")
-  public String signature(@RequestBody ReplyRequestModel replyRequestModel) {
-    logger.info("参数 = replyRequestModel:{},openai-token:{},model:{}",replyRequestModel,openAiToken,openModel);
-    ObjectMapper mapper = defaultObjectMapper();
-    Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(host, Integer.parseInt(port)));
-    logger.info("代理 = host:{},port:{}",host,port);
-    OkHttpClient client = defaultClient(openAiToken, Duration.ofSeconds(10))
-            .newBuilder()
-            .proxy(proxy)
-            .build();
-    Retrofit retrofit = defaultRetrofit(client, mapper);
-    OpenAiApi api = retrofit.create(OpenAiApi.class);
-    OpenAiService service = new OpenAiService(api);
+  public ReplyResponseTextModel signature(@RequestBody ReplyRequestModel replyRequestModel) throws Exception {
+    logger.info("参数 = replyRequestModel:{}",replyRequestModel);
+    ReplyResponseTextModel replyResponseTextModel = new ReplyResponseTextModel();
+    replyResponseTextModel.setToUserName(replyRequestModel.getFromUserName());
+    replyResponseTextModel.setFromUserName(replyRequestModel.getToUserName());
+    replyResponseTextModel.setCreateTime(String.valueOf(System.currentTimeMillis()/1000));
+    replyResponseTextModel.setMsgType(replyRequestModel.getMsgType());
 
-    CompletionRequest completionRequest = CompletionRequest.builder()
-            .prompt(replyRequestModel.getContent())
-            .model(openModel)
-            .echo(true)
-            .build();
-
-    String result = service.createCompletion(completionRequest).getObject();
-    logger.info("返回值:{}",result);
-    return "success";
+    String content = replyRequestModel.getContent();
+    if("IO模型思考题".equals(content)){
+      replyResponseTextModel.setContent("不浪费服务器的资源就是高性能。不论服务器本身性能多低，只要充分发挥了服务器的性能，对程序来说就叫高性能。");
+    }else {
+      replyResponseTextModel.setContent("留言已收到，稍后回复您~~~");
+    }
+    logger.info("返回值:{}",replyResponseTextModel);
+    return replyResponseTextModel;
   }
 }
